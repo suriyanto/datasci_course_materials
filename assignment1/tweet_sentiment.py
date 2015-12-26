@@ -1,12 +1,6 @@
 import sys
 import json
 
-def hw():
-    print 'Hello, world!'
-
-def lines(fp):
-    print str(len(fp.readlines()))
-
 def read_scores(afinnfile):
 	scores = {} # initialize an empty dictionary
 	for line in afinnfile:
@@ -16,24 +10,20 @@ def read_scores(afinnfile):
 	return scores
 
 def sentiment_score(text, scores):
-	if text != None:
-		s = 0
-		for w in text.split(" "):
-			s = s + word_score(w, scores)
-		return s
-	else:
-		return 0
+	return 0 if text == None else tweet_score(text, scores)
+
+def tweet_score(text, scores):
+	s = 0
+	for w in text.split(" "):
+		s = s + word_score(w, scores)
+	return s	
 
 def word_score(w, scores):
-	s = scores.get(w)
-	return 0 if (s == None) else s
+	return 0 if not(w in scores) else scores[w]
 
 def main():
     sent_file = open(sys.argv[1])
     tweet_file = open(sys.argv[2])
-    hw()
-    # lines(sent_file)
-    # lines(tweet_file)
     scores = read_scores(sent_file)
     for line in tweet_file:
     	print sentiment_score(json.loads(line).get("text"), scores)
