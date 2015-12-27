@@ -8,7 +8,7 @@ def should_include_term(term):
 	return not (len(term) == 1 or term.lower() in excluded_words or term.startswith(('#', '@')))
 
 def line_freq(line):
-	return [] if line == None else [(w, 1) for w in filter(lambda x: should_include_term(x.strip()), line.split(' '))]
+	return [] if line == None else [(w, 1) for w in filter(lambda x: should_include_term(x.strip()), line.replace('\n', ' ').split(' '))]
 
 def merge(existing, new):
 	if len(new) == 0:
@@ -29,8 +29,7 @@ def main():
     	freq = merge(freq, line_freq(json.loads(line).get("text")))
 
     for k, v in freq.iteritems():
-    	if v > 1:
-    		print '%s %s' % (k, v)
+    	print '%s %s' % (k, v)
 
 if __name__ == '__main__':
     main()
